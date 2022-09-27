@@ -8,3 +8,16 @@ abstract class EventsState extends Equatable {
 }
 
 class EventsInitial extends EventsState {}
+
+class EventsLoading extends EventsState {}
+
+class EventsLoaded extends EventsState {
+  final List<Event> events;
+
+  const EventsLoaded(this.events);
+
+  @override
+  List<Object> get props => [events];
+}
+
+class EventsError extends EventsState {}
