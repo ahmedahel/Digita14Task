@@ -1,8 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:digital_14_task/features/events/data/datasources/remote_events_datasource.dart';
 
-import '../models/events_model.dart';
-
 class EventsRepository {
   final RemoteEventsDataSource remoteEventsDataSource;
 

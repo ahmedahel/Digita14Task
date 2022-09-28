@@ -7,15 +7,15 @@ import '../../data/repositories/events_repository.dart';
 part 'events_state.dart';
 
 class EventsCubit extends Cubit<EventsState> {
-  final EventsRepository _eventsRepository;
+  final EventsRepository eventsRepository;
 
-  EventsCubit(this._eventsRepository) : super(EventsInitial()) {
+  EventsCubit({required this.eventsRepository}) : super(EventsInitial()) {
     getEvents();
   }
 
   void getEvents() async {
     emit(EventsLoading());
-    final eitherFailureOrEventsResponse = await _eventsRepository.getEvents();
+    final eitherFailureOrEventsResponse = await eventsRepository.getEvents();
     eitherFailureOrEventsResponse.fold((failure) => emit(EventsError()),
         (success) {
       emit(EventsLoaded(success.events));

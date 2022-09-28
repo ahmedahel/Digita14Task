@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:digital_14_task/features/events/presentation/cubit/events_cubit.dart';
+import '../../../event_details/presentation/pages/event_details_page.dart';
 import '../widgets/event_list_item_widget.dart';
+import '../widgets/search_bar.dart';
 
 class EventsPage extends StatefulWidget {
   const EventsPage({Key? key}) : super(key: key);
@@ -10,21 +13,76 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends State<EventsPage> {
+  late final TextEditingController _controller;
+  late final FocusNode _focusNode;
+  String _query = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController()..addListener(_onTextChanged);
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTextChanged() {
+    setState(() {
+      _query = _controller.text;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListView.separated(
-            itemBuilder: (BuildContext context, index) {
-              return EventListItemWidget();
-            },
-            separatorBuilder: (BuildContext context, index) {
-              return const SizedBox(
-                height: 16,
-              );
-            },
-            itemCount: 3)
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Padding(
+          padding: const EdgeInsets.all(8),
+          child: SearchBar(
+            controller: _controller,
+            focusNode: _focusNode,
+          ),
+        ),
+      ),
+      body: BlocBuilder<EventsCubit, EventsState>(
+        builder: (context, state) {
+          if (state is EventsError) {
+            return const Center(
+              child: Icon(Icons.close),
+            );
+          } else if (state is EventsLoaded) {
+            final events = state.events;
+            return ListView.separated(
+                itemCount: events.length,
+                itemBuilder: (context, index) => EventListItemWidget(
+                      event: events[index],
+                      onItemClicked: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EventDetailsPage(
+                                      eventId: events[index].id,
+                                    )));
+                      },
+                    ),
+                separatorBuilder: (BuildContext context, index) {
+                  return Container(
+                    color: Colors.grey.shade200,
+                    height: 2,
+                  );
+                });
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
 }

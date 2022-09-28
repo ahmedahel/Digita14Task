@@ -4,12 +4,13 @@ class GetEventsResponse {
     required this.meta,
   });
 
-  List<Event> events;
+  List<EventModel> events;
   Meta meta;
 
   factory GetEventsResponse.fromJson(Map<String, dynamic> json) =>
       GetEventsResponse(
-        events: List<Event>.from(json["events"].map((x) => Event.fromJson(x))),
+        events: List<EventModel>.from(
+            json["events"].map((x) => EventModel.fromJson(x))),
         meta: Meta.fromJson(json["meta"]),
       );
 
@@ -19,8 +20,8 @@ class GetEventsResponse {
       };
 }
 
-class Event {
-  Event({
+class EventModel {
+  EventModel({
     required this.type,
     required this.id,
     required this.datetimeUtc,
@@ -84,9 +85,9 @@ class Event {
   dynamic enddatetimeUtc;
   List<dynamic> themes;
   List<dynamic> domainInformation;
-  bool generalAdmission;
+  bool? generalAdmission;
 
-  factory Event.fromJson(Map<String, dynamic> json) => Event(
+  factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
         type: json["type"],
         id: json["id"],
         datetimeUtc: DateTime.parse(json["datetime_utc"]),
@@ -120,9 +121,7 @@ class Event {
         themes: List<dynamic>.from(json["themes"].map((x) => x)),
         domainInformation:
             List<dynamic>.from(json["domain_information"].map((x) => x)),
-        generalAdmission: json["general_admission"] == null
-            ? null
-            : json["general_admission"],
+        generalAdmission: json["general_admission"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -203,10 +202,10 @@ class Performer {
   PerformerImages images;
   dynamic divisions;
   bool hasUpcomingEvents;
-  bool primary;
+  bool? primary;
   PerformerStats stats;
   List<Taxonomy> taxonomies;
-  String imageAttribution;
+  String? imageAttribution;
   String url;
   double score;
   String slug;
@@ -214,7 +213,7 @@ class Performer {
   String shortName;
   int numUpcomingEvents;
   dynamic colors;
-  String imageLicense;
+  String? imageLicense;
   List<Genre> genres;
   int popularity;
   dynamic location;
@@ -241,7 +240,9 @@ class Performer {
         numUpcomingEvents: json["num_upcoming_events"],
         colors: json["colors"],
         imageLicense: json["image_license"],
-        genres: List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x))),
+        genres: json["genres"] == null
+            ? []
+            : List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x))),
         popularity: json["popularity"],
         location: json["location"],
         imageRightsMessage: json["image_rights_message"],
@@ -507,15 +508,15 @@ class EventStats {
     required this.lowestSgBasePriceGoodDeals,
   });
 
-  int listingCount;
-  int averagePrice;
+  int? listingCount;
+  int? averagePrice;
   dynamic lowestPriceGoodDeals;
-  int lowestPrice;
-  int highestPrice;
-  int visibleListingCount;
+  int? lowestPrice;
+  int? highestPrice;
+  int? visibleListingCount;
   List<int> dqBucketCounts;
-  int medianPrice;
-  int lowestSgBasePrice;
+  int? medianPrice;
+  int? lowestSgBasePrice;
   dynamic lowestSgBasePriceGoodDeals;
 
   factory EventStats.fromJson(Map<String, dynamic> json) => EventStats(
@@ -584,8 +585,8 @@ class Venue {
     required this.displayLocation,
   });
 
-  String state;
-  String nameV2;
+  String? state;
+  String? nameV2;
   String postalCode;
   String name;
   List<dynamic> links;
@@ -608,7 +609,7 @@ class Venue {
   String displayLocation;
 
   factory Venue.fromJson(Map<String, dynamic> json) => Venue(
-        state: json["state"] == null ? null : json["state"],
+        state: json["state"],
         nameV2: json["name_v2"],
         postalCode: json["postal_code"],
         name: json["name"],
@@ -633,7 +634,7 @@ class Venue {
       );
 
   Map<String, dynamic> toJson() => {
-        "state": state == null ? null : state,
+        "state": state,
         "name_v2": nameV2,
         "postal_code": postalCode,
         "name": name,

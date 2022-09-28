@@ -1,4 +1,8 @@
+import 'package:digital_14_task/features/events/data/datasources/remote_events_datasource.dart';
+import 'package:digital_14_task/features/events/data/repositories/events_repository.dart';
+import 'package:digital_14_task/features/events/presentation/cubit/events_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'features/events/presentation/pages/events_page.dart';
 
@@ -26,7 +30,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const EventsPage(),
+      home: BlocProvider<EventsCubit>(
+        create: (context) => EventsCubit(
+          eventsRepository: EventsRepository(
+              remoteEventsDataSource: RemoteEventsDataSource()),
+        ),
+        child: const EventsPage(),
+      ),
     );
   }
 }

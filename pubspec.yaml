@@ -39,6 +39,8 @@ dependencies:
   dio: ^4.0.6
   connectivity_plus: ^2.3.7
   dartz: ^0.10.1
+  flutter_bloc: ^8.1.1
+  badges: ^2.0.3
 
 dev_dependencies:
   flutter_test:
