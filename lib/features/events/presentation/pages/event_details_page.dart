@@ -23,7 +23,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   void initState() {
     super.initState();
     context.read<EventDetailsCubit>().getEventDetails(widget.eventId);
-    isAddToFav = box.read(widget.eventId.toString()) != null;
+    isAddToFav = box.read(widget.eventId.toString()) != null &&
+        box.read(widget.eventId.toString());
     setState(() {});
   }
 

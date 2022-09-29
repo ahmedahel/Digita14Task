@@ -17,7 +17,8 @@ class EventModel extends Equatable {
   String shortTitle;
   String title;
 
-  bool get isAddToFav => box.read(id.toString()) != null;
+  bool get isAddToFav =>
+      box.read(id.toString()) != null && box.read(id.toString());
   set isAddToFav(bool val) => box.write(id.toString(), val);
 
   factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
@@ -37,6 +38,5 @@ class EventModel extends Equatable {
       };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id];
 }

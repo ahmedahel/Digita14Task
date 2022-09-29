@@ -28,7 +28,11 @@ class EventsCubit extends Cubit<EventsState> {
   }
 
   void addRemoveToFav(int eventId, bool isFav) {
-    events.firstWhere((element) => element.id == eventId).isAddToFav = isFav;
+    //events.firstWhere((element) => element.id == eventId).isAddToFav = isFav;
+
+    int index = events.indexWhere((element) => element.id == eventId);
+    events[index].isAddToFav = isFav;
+
     emit(EventsLoaded(events: events));
   }
 
