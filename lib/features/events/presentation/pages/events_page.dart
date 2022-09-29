@@ -19,10 +19,12 @@ class _EventsPageState extends State<EventsPage> {
   late final TextEditingController _controller;
   late final FocusNode _focusNode;
   String _query = '';
+  late EventsCubit eventsCubit ;
 
   @override
   void initState() {
     super.initState();
+    eventsCubit = context.read<EventsCubit>();
     _controller = TextEditingController()..addListener(_onTextChanged);
     _focusNode = FocusNode();
   }
@@ -38,7 +40,7 @@ class _EventsPageState extends State<EventsPage> {
     setState(() {
       _query = _controller.text;
     });
-    context.read<EventsCubit>().search(_query);
+   eventsCubit.search(_query);
   }
 
   @override
@@ -54,7 +56,7 @@ class _EventsPageState extends State<EventsPage> {
         ),
       ),
       body: BlocBuilder<EventsCubit, EventsState>(
-        builder: (context, state) {
+        builder: (ctx, state) {
           if (state is EventsError) {
             return const Center(
               child: Icon(Icons.close),
@@ -65,7 +67,7 @@ class _EventsPageState extends State<EventsPage> {
                 itemCount: events.length,
                 itemBuilder: (context, index) => EventListItemWidget(
                       event: events[index],
-                      onItemClicked: () => _onItemClicked(events[index].id),
+                      onItemClicked: () => _onItemClicked(ctx ,events[index].id),
                     ),
                 separatorBuilder: (BuildContext context, index) {
                   return Container(
@@ -83,7 +85,7 @@ class _EventsPageState extends State<EventsPage> {
     );
   }
 
-  void _onItemClicked(int eventId) {
+  void _onItemClicked(BuildContext context, int eventId) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -94,6 +96,9 @@ class _EventsPageState extends State<EventsPage> {
                     ),
                 child: EventDetailsPage(
                   eventId: eventId,
+                  onFavIconClicked: (bool isAddToFav) {
+                    eventsCubit.addRemoveToFav(eventId, isAddToFav);
+                  },
                 ))));
   }
 }

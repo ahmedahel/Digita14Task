@@ -8,15 +8,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EventDetailsPage extends StatefulWidget {
   final int eventId;
-
-  const EventDetailsPage({Key? key, required this.eventId}) : super(key: key);
+  final Function(bool isAddToFav) onFavIconClicked;
+  
+  const EventDetailsPage({Key? key, required this.eventId, required this.onFavIconClicked}) : super(key: key);
 
   @override
   State<EventDetailsPage> createState() => _EventDetailsPageState();
 }
 
 class _EventDetailsPageState extends State<EventDetailsPage> {
-  bool isAddToFav = false;
+   bool isAddToFav = false;
   @override
   void initState() {
     super.initState();
@@ -51,13 +52,13 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     width: 20,
                   ),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () {  
+                   
                       setState(() {
                         isAddToFav = !isAddToFav;
                       });
-                      context
-                          .read<EventsCubit>()
-                          .addRemoveToFav(widget.eventId, isAddToFav);
+                         widget.onFavIconClicked(isAddToFav);
+                         //context.read<EventsCubit>().addRemoveToFav(widget.eventId, isAddToFav);
                     },
                     child: Icon(
                       Icons.favorite,
