@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:digital_14_task/features/events/data/models/get_events_response_model.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../data/models/event_model.dart';
 import '../../data/repositories/events_repository.dart';
@@ -12,26 +12,24 @@ class EventsCubit extends Cubit<EventsState> {
   String _query = "";
   List<EventModel> events = [];
 
-  EventsCubit({required this.eventsRepository}) : super(EventsInitial()) {
-    getEvents();
-  }
+  EventsCubit(this.eventsRepository) : super(EventsInitial());
 
   void getEvents() async {
     emit(EventsLoading());
     final eitherFailureOrEventsResponse =
         await eventsRepository.getEvents(_query);
-    eitherFailureOrEventsResponse.fold((failure) => emit(EventsError()),
-        (success) {
+    eitherFailureOrEventsResponse.fold((failure) {
+      debugPrint("failure $failure");
+      return emit(EventsError());
+    }, (success) {
       events = success.events;
-      emit(EventsLoaded(events:events));
+      emit(EventsLoaded(events: events));
     });
   }
 
   void addRemoveToFav(int eventId, bool isFav) {
-    int index = events.indexWhere((element) => element.id == eventId);
-    events[index].isAddToFav = isFav;
-   final eventLoadedState =  state as EventsLoaded;
-    emit(eventLoadedState.copyWith(events: events));
+    events.firstWhere((element) => element.id == eventId).isAddToFav = isFav;
+    emit(EventsLoaded(events: events));
   }
 
   void search(String query) {

@@ -1,12 +1,15 @@
-import 'package:digital_14_task/features/events/data/datasources/remote_events_datasource.dart';
-import 'package:digital_14_task/features/events/data/repositories/events_repository.dart';
 import 'package:digital_14_task/features/events/presentation/cubit/events_cubit.dart';
+import 'package:digital_14_task/service_locator.dart' as di;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:get_storage/get_storage.dart';
 import 'features/events/presentation/pages/events_page.dart';
 
-void main() {
+final box = GetStorage();
+
+Future<void> main() async {
+  await GetStorage.init();
+  await di.setup();
   runApp(const MyApp());
 }
 
@@ -31,10 +34,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: BlocProvider<EventsCubit>(
-        create: (context) => EventsCubit(
-          eventsRepository: EventsRepository(
-              remoteEventsDataSource: RemoteEventsDataSource()),
-        ),
+        create: (context) => di.getIt<EventsCubit>(),
         child: const EventsPage(),
       ),
     );

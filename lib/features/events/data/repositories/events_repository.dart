@@ -4,13 +4,16 @@ import 'package:digital_14_task/features/events/data/datasources/remote_events_d
 import '../models/event_model.dart';
 import '../models/get_events_response_model.dart';
 
-class EventsRepository {
+abstract class EventsRepository {
+  Future<Either<Exception, GetEventsResponse>> getEvents(String query);
+  Future<Either<Exception, EventModel>> getEventDetails(int eventId);
+}
+
+class EventsRepositoryImpl extends EventsRepository {
   final RemoteEventsDataSource remoteEventsDataSource;
+  EventsRepositoryImpl(this.remoteEventsDataSource);
 
-  EventsRepository({required this.remoteEventsDataSource});
-
-  
-
+  @override
   Future<Either<Exception, GetEventsResponse>> getEvents(String query) async {
     try {
       final response = await remoteEventsDataSource.getEvents(query);
@@ -20,6 +23,7 @@ class EventsRepository {
     }
   }
 
+  @override
   Future<Either<Exception, EventModel>> getEventDetails(int eventId) async {
     try {
       final response = await remoteEventsDataSource.getEventDetails(eventId);

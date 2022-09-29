@@ -23,7 +23,7 @@ class EventsLoaded extends EventsState {
   }
 
   @override
-  List<Object> get props => [events];
+  List<Object> get props => [events, DateTime.now()];
 }
 
 class EventsError extends EventsState {}

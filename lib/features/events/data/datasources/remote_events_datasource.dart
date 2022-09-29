@@ -1,31 +1,34 @@
+import 'package:digital_14_task/core/constants.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 
 import '../models/event_model.dart';
+
 import '../models/get_events_response_model.dart';
 
-class RemoteEventsDataSource {
-  final Dio client = Dio();
+abstract class RemoteEventsDataSource {
+  Future<GetEventsResponse> getEvents(String query);
+  Future<EventModel> getEventDetails(int eventId);
+}
 
-  RemoteEventsDataSource();
+class RemoteEventsDataSourceImpl implements RemoteEventsDataSource {
+  final Dio client;
 
+  RemoteEventsDataSourceImpl(this.client);
+  @override
   Future<EventModel> getEventDetails(int eventId) async {
-    final url =
-        'https://api.seatgeek.com/2/events/$eventId?client_id=MjkzODE1MzV8MTY2NDI5NzYzMy4zMDYwNTI0';
+    final url = '/2/events/$eventId?client_id=$clientId';
 
     final response = await client.get(url);
     return EventModel.fromJson(response.data);
   }
 
+  @override
   Future<GetEventsResponse> getEvents(String query) async {
-    String url =
-        'https://api.seatgeek.com/2/events?client_id=MjkzODE1MzV8MTY2NDI5NzYzMy4zMDYwNTI0';
+    String url = '/2/events?client_id=$clientId&per_page=10&page=1';
 
     if (query.isNotEmpty) {
       url += "&q=$query";
     }
-    debugPrint("Url :$url");
-
     final response = await client.get(url);
     return GetEventsResponse.fromJson(response.data);
   }

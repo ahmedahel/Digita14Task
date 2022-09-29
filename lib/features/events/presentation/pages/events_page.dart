@@ -1,8 +1,7 @@
+import 'package:digital_14_task/service_locator.dart' as di;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:digital_14_task/features/events/presentation/cubit/events_cubit.dart';
-import '../../data/datasources/remote_events_datasource.dart';
-import '../../data/repositories/events_repository.dart';
 import '../cubit/event_details_cubit.dart';
 import 'event_details_page.dart';
 import '../widgets/event_list_item_widget.dart';
@@ -19,12 +18,12 @@ class _EventsPageState extends State<EventsPage> {
   late final TextEditingController _controller;
   late final FocusNode _focusNode;
   String _query = '';
-  late EventsCubit eventsCubit ;
+  late EventsCubit eventsCubit;
 
   @override
   void initState() {
     super.initState();
-    eventsCubit = context.read<EventsCubit>();
+    eventsCubit = context.read<EventsCubit>()..getEvents();
     _controller = TextEditingController()..addListener(_onTextChanged);
     _focusNode = FocusNode();
   }
@@ -40,7 +39,7 @@ class _EventsPageState extends State<EventsPage> {
     setState(() {
       _query = _controller.text;
     });
-   eventsCubit.search(_query);
+    eventsCubit.search(_query);
   }
 
   @override
@@ -67,7 +66,8 @@ class _EventsPageState extends State<EventsPage> {
                 itemCount: events.length,
                 itemBuilder: (context, index) => EventListItemWidget(
                       event: events[index],
-                      onItemClicked: () => _onItemClicked(ctx ,events[index].id),
+                      onItemClicked: () =>
+                          _onItemClicked(ctx, events[index].id),
                     ),
                 separatorBuilder: (BuildContext context, index) {
                   return Container(
@@ -90,10 +90,7 @@ class _EventsPageState extends State<EventsPage> {
         context,
         MaterialPageRoute(
             builder: (context) => BlocProvider<EventDetailsCubit>(
-                create: (context) => EventDetailsCubit(
-                      eventsRepository: EventsRepository(
-                          remoteEventsDataSource: RemoteEventsDataSource()),
-                    ),
+                create: (context) => di.getIt<EventDetailsCubit>(),
                 child: EventDetailsPage(
                   eventId: eventId,
                   onFavIconClicked: (bool isAddToFav) {

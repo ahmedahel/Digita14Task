@@ -41,6 +41,11 @@ dependencies:
   dartz: ^0.10.1
   flutter_bloc: ^8.1.1
   badges: ^2.0.3
+  bloc_test: ^9.1.0
+  http_mock_adapter: ^0.3.3
+  get_storage: ^2.0.3
+  get_it: ^7.2.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

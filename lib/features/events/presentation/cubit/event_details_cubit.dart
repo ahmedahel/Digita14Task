@@ -9,8 +9,7 @@ part 'event_details_state.dart';
 class EventDetailsCubit extends Cubit<EventDetailsState> {
   final EventsRepository eventsRepository;
 
-  EventDetailsCubit({required this.eventsRepository})
-      : super(EventDetailsInitial());
+  EventDetailsCubit(this.eventsRepository) : super(EventDetailsInitial());
 
   void getEventDetails(int eventId) async {
     emit(EventDetailsLoading());
