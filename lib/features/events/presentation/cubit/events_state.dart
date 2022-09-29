@@ -14,7 +14,13 @@ class EventsLoading extends EventsState {}
 class EventsLoaded extends EventsState {
   final List<EventModel> events;
 
-  const EventsLoaded(this.events);
+  const EventsLoaded({required this.events});
+
+  EventsLoaded copyWith({required final List<EventModel> events}) {
+    return EventsLoaded(
+      events: events,
+    );
+  }
 
   @override
   List<Object> get props => [events];

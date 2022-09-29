@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
-import 'package:digital_14_task/features/events/data/models/events_model.dart';
 import 'package:flutter/material.dart';
+
+import '../../data/models/event_model.dart';
 
 class EventListItemWidget extends StatelessWidget {
   final EventModel event;
@@ -45,6 +46,7 @@ class EventListItemWidget extends StatelessWidget {
             ],
           ),
           leading: Badge(
+            showBadge: event.isAddToFav,
             badgeColor: Colors.white,
             position: BadgePosition.topStart(),
             badgeContent: const Icon(

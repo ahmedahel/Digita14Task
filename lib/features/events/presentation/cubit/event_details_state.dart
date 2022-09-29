@@ -12,12 +12,12 @@ class EventDetailsInitial extends EventDetailsState {}
 class EventDetailsLoading extends EventDetailsState {}
 
 class EventDetailsLoaded extends EventDetailsState {
-  final List<EventModel> events;
+  final EventModel event;
 
-  const EventDetailsLoaded(this.events);
+  const EventDetailsLoaded(this.event);
 
   @override
-  List<Object> get props => [events];
+  List<Object> get props => [event];
 }
 
 class EventDetailsError extends EventDetailsState {}
